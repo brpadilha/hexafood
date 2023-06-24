@@ -1,4 +1,4 @@
-import { Cliente } from '../../../core/domain/clientes/entities/cliente.entity';
+import { Cliente } from '../../../core/domain/entities/cliente.entity';
 import { IClientesRepository } from '../../../core/application/ports/repositories/clientes.repository';
 
 export class InMemoryClientesRepository implements IClientesRepository {

@@ -2,7 +2,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { IClientesRepository } from '../../src/identificacao/core/application/ports/repositories/clientes.repository';
 import { ClientesService } from '../../src/identificacao/core/application/services/clientes.service';
 import { InMemoryClientesRepository } from '../../src/identificacao/adapter/driven/infrastructure/in-memory-clientes.repository';
-import { Cliente } from '../../src/identificacao/core/domain/clientes/entities/cliente.entity';
+import { Cliente } from '../../src/identificacao/core/domain/entities/cliente.entity';
 
 describe('ClientesService', () => {
   let service: ClientesService;

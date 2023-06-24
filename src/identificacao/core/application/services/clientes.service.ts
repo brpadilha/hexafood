@@ -1,5 +1,5 @@
 import { Injectable, Inject } from '@nestjs/common';
-import { Cliente } from '../../domain/clientes/entities/cliente.entity';
+import { Cliente } from '../../domain/entities/cliente.entity';
 import { IClientesRepository } from '../ports/repositories/clientes.repository';
 
 @Injectable()
@@ -10,6 +10,7 @@ export class ClientesService {
     ) {}
 
   create(cliente: Cliente) {
+    //validar se já tem cliente cpf
     return this.clientesRepository.create(cliente);
   }
 
