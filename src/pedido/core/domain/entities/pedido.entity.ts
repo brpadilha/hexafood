@@ -1,4 +1,4 @@
-import { Cliente } from './../../../../identificacao/core/domain/entities/cliente.entity';
+import { Cliente } from '../../../../identificacao/core/domain/cliente/entity/cliente.entity';
 import { StatusPedido } from '../enum/status-pedido.enum';
 import { Produto } from './produto.entity';
 export class Pedido {

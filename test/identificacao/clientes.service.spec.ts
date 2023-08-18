@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { IClientesRepository } from '../../src/identificacao/core/application/ports/repositories/clientes.repository';
-import { ClientesService } from '../../src/identificacao/core/application/services/clientes.service';
-import { InMemoryClientesRepository } from '../../src/identificacao/adapter/driven/infrastructure/in-memory-clientes.repository';
-import { Cliente } from '../../src/identificacao/core/domain/entities/cliente.entity';
+import { IClientesRepository } from '../../src/identificacao/core/domain/cliente/repository/clientes.repository';
+import { ClientesService } from '../../src/identificacao/core/application/usecases/clientes.service';
+import { InMemoryClientesRepository } from '../../src/identificacao/infrastructure/gateway/in-memory-clientes.repository';
+import { Cliente } from '../../src/identificacao/core/domain/cliente/entity/cliente.entity';
 import { describe } from 'node:test';
 import { ClienteException } from 'src/identificacao/core/application/exceptions/cliente.exception';
 

@@ -17,6 +17,7 @@ import { EventEmitter2 } from '@nestjs/event-emitter';
 import { NovoPedidoListener } from './core/application/listeners/novo-pedido.listener';
 import { PagamentoModule } from 'src/pagamento/pagamento.module';
 import { IdentificacaoModule } from 'src/identificacao/identificacao.module';
+import { FindClienteUseCase } from 'src/identificacao/core/application/usecases/cliente/find.cliente.usecase';
 
 @Module({
   imports: [ forwardRef(() => PagamentoModule), IdentificacaoModule],
@@ -37,6 +38,7 @@ import { IdentificacaoModule } from 'src/identificacao/identificacao.module';
     CategoriasService,
     PedidosService,
     NovoPedidoListener,
+    FindClienteUseCase
   ],
   exports: [PedidosService],
 })

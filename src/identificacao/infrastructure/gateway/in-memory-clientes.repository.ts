@@ -1,11 +1,14 @@
-import { Cliente } from '../../../core/domain/entities/cliente.entity';
-import { IClientesRepository } from '../../../core/application/ports/repositories/clientes.repository';
+import { ClienteFactory } from 'src/identificacao/core/domain/cliente/factory/cliente.factory';
+import { Cliente } from '../../core/domain/cliente/entity/cliente.entity';
+import { IClientesRepository } from '../../core/domain/cliente/repository/clientes.repository';
 
 export class InMemoryClientesRepository implements IClientesRepository {
-  private clientes: Cliente[] = [{ id: 1, nome: 'Sr. Teste 1', cpf: '123' }];
+  private clientes: Cliente[] = [
+    ClienteFactory.create({ id: 1, nome: 'Sr. Teste 1', cpf: '123' }),
+  ];
 
   async create(data: Cliente): Promise<Cliente> {
-    const cliente = { ...data };
+    const cliente = ClienteFactory.create({ ...data });
     this.clientes.push(cliente);
     return cliente;
   }

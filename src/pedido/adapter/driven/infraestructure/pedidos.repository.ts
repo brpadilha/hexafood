@@ -1,3 +1,4 @@
+import { ClienteFactory } from './../../../../identificacao/core/domain/cliente/factory/cliente.factory';
 import { PrismaClient } from '@prisma/client';
 import { IPedidosRepository } from '../../../core/application/ports/repositories/pedidos.repository';
 import { StatusPedido } from 'src/pedido/core/domain/enum/status-pedido.enum';
@@ -83,7 +84,7 @@ export class PedidosRepository implements IPedidosRepository {
             StatusPedido[result.status as keyof typeof StatusPedido];
           pedido.createdAt = result.createdAt;
           pedido.updatedAt = result.updatedAt;
-          pedido.cliente = result.cliente;
+          pedido.cliente = ClienteFactory.create(result.cliente);
           pedido.valor_total = result.valor_total;
           pedido.itens = result.itens.map((item) => ({
             id: item.id,
@@ -139,7 +140,7 @@ export class PedidosRepository implements IPedidosRepository {
           StatusPedido[result.status as keyof typeof StatusPedido];
         pedido.createdAt = result.createdAt;
         pedido.updatedAt = result.updatedAt;
-        pedido.cliente = result.cliente;
+        pedido.cliente = ClienteFactory.create(result.cliente);
         pedido.valor_total = result.valor_total;
         pedido.itens = result.itens.map((item) => ({
           id: item.id,
@@ -175,7 +176,7 @@ export class PedidosRepository implements IPedidosRepository {
           StatusPedido[result.status as keyof typeof StatusPedido];
         pedido.createdAt = result.createdAt;
         pedido.updatedAt = result.updatedAt;
-        pedido.cliente = result.cliente;
+        pedido.cliente = ClienteFactory.create(result.cliente);
         pedido.valor_total = result.valor_total;
         pedido.itens = result.itens.map((item) => ({
           id: item.id,

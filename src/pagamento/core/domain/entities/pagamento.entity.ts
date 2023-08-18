@@ -1,4 +1,4 @@
-import { Cliente } from 'src/identificacao/core/domain/entities/cliente.entity';
+import { Cliente } from '../../../../identificacao/core/domain/cliente/entity/cliente.entity';
 import { Pedido } from 'src/pedido/core/domain/entities/pedido.entity';
 
 export class Pagamento {

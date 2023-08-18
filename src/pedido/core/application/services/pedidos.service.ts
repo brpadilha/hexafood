@@ -1,4 +1,3 @@
-import { ClientesService } from './../../../../identificacao/core/application/services/clientes.service';
 import { Injectable, Inject } from '@nestjs/common';
 import { Item, Pedido } from '../../domain/entities/pedido.entity';
 import { IPedidosRepository } from './../ports/repositories/pedidos.repository';
@@ -8,6 +7,7 @@ import EventEmitter from 'events';
 import { NovoPedidoEvent } from '../events/novo-pedido.event';
 import { StatusPedido } from '../../domain/enum/status-pedido.enum';
 import { PedidoException } from '../exceptions/pedido.exception';
+import { FindClienteUseCase } from 'src/identificacao/core/application/usecases/cliente/find.cliente.usecase';
 
 @Injectable()
 export class PedidosService {
@@ -15,7 +15,7 @@ export class PedidosService {
     @Inject(IPedidosRepository)
     private pedidosRepository: IPedidosRepository,
     private produtosService: ProdutosService,
-    private clientesService: ClientesService,
+    private findClienteUseCase: FindClienteUseCase,
     @Inject('EventEmitter')
     private eventEmitter: EventEmitter,
   ) {}
@@ -79,7 +79,7 @@ export class PedidosService {
     pedido.id_cliente = pedidoDto.id_cliente === 0 ? null : pedidoDto.id_cliente;
 
     if (pedido.id_cliente > 0) {
-      const cliente = await this.clientesService.findById(pedidoDto.id_cliente);
+      const cliente = await this.findClienteUseCase.execute(pedidoDto.id_cliente);
       if(!cliente){
         throw new PedidoException(`Cliente não cadastrado. Id_cliente: ${pedidoDto.id_cliente}`);
       }

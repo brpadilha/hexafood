@@ -1,10 +1,12 @@
 import { Module, ValidationPipe } from '@nestjs/common';
-import { ClientesController } from './adapter/driver/clientes.controller';
-import { ClientesRepository } from './adapter/driven/infrastructure/clientes.repository';
-import { IClientesRepository } from './core/application/ports/repositories/clientes.repository';
-import { ClientesService } from './core/application/services/clientes.service';
+import { ClientesController } from './infrastructure/controller/clientes.controller';
+import { ClientesRepository } from './infrastructure/gateway/clientes.repository';
+import { IClientesRepository } from './core/domain/cliente/repository/clientes.repository';
 import { APP_INTERCEPTOR, APP_FILTER } from '@nestjs/core';
-import { ValidationFilter } from './adapter/driven/infrastructure/filters/validation.filter';
+import { FindClienteUseCase } from './core/application/usecases/cliente/find.cliente.usecase';
+import { CreateClienteUseCase } from './core/application/usecases/cliente/create.cliente.usecase';
+import { IndentifyClienteUseCase } from './core/application/usecases/cliente/identify.cliente.usecase';
+import { ValidationFilter } from './infrastructure/filter/validation.filter';
 
 @Module({
   controllers: [ClientesController],
@@ -17,8 +19,10 @@ import { ValidationFilter } from './adapter/driven/infrastructure/filters/valida
       provide: APP_FILTER,
       useClass: ValidationFilter,
     },
-    ClientesService,
+    FindClienteUseCase,
+    CreateClienteUseCase,
+    IndentifyClienteUseCase,
   ],
-  exports: [ClientesService],
+  exports: [FindClienteUseCase],
 })
 export class IdentificacaoModule {}

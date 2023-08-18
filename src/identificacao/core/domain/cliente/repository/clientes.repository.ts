@@ -1,4 +1,4 @@
-import { Cliente } from '../../../domain/entities/cliente.entity';
+import { Cliente } from '../entity/cliente.entity';
 
 export const IClientesRepository = 'IClientesRepository';
 
