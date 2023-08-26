@@ -6,7 +6,13 @@ export class ClientesRepository implements IClientesRepository {
   private prisma: PrismaClient;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL, 
+        },
+      },
+    });
   }
 
   async create(data: Cliente): Promise<Cliente> {

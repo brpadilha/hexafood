@@ -7,7 +7,13 @@ export class PagamentosRepository implements IPagamentosRepository {
   private prisma: PrismaClient;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL, 
+        },
+      },
+    });
   }
   createPagamento(data: Pagamento): Promise<Pagamento> {
     return this.prisma.pagamento.create({

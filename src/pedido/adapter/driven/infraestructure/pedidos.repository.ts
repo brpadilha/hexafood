@@ -7,7 +7,13 @@ export class PedidosRepository implements IPedidosRepository {
   private prisma: PrismaClient;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL, 
+        },
+      },
+    });
   }
 
   create(pedido: Pedido): Promise<Pedido> {

@@ -7,7 +7,13 @@ export class ProdutosRepository implements IProdutosRepository {
   private prisma: PrismaClient;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL, 
+        },
+      },
+    });
   }
 
   async createManyProdutos(produtos: ProdutoDto[]) {
