@@ -1,9 +1,9 @@
 import { PrismaClient } from '@prisma/client';
 import {EventEmitter} from 'events';
-import { PedidoDTO } from '../../src/pedido/adapter/driven/dto/pedido.dto';
-import { Item, Pedido } from '../../src/pedido/core/domain/entities/pedido.entity';
-import { Produto } from '../../src/pedido/core/domain/entities/produto.entity';
+import { Item, Pedido } from '../../src/pedido/core/domain/entity/pedido.entity';
+import { Produto } from '../../src/pedido/core/domain/entity/produto.entity';
 import { NovoPedidoEvent } from '../../src/pedido/core/application/events/novo-pedido.event';
+import { PedidoDTO } from 'src/pedido/core/application/usecases/pedidoUseCase/pedido.dto';
 
 const generatePedido = ( pedido: Pedido) => ({
   where: { id: pedido.id },

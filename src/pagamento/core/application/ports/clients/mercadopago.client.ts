@@ -2,14 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   IPagamentosRepository,
   PAGAMENTOS_REPOSITORY,
-} from '../../ports/repositories/pagamentos.repository';
+} from '../../../domain/pagamento/repository/pagamentos.repository';
 
 import mercadopago from '../../../../../mocks/mercadoPagoMockService';
 import {
   CreatePagamentoDto,
   PagamentoDto,
-} from '../../../../adapter/driven/dto/pagamentoDto';
-import { Pagamento } from 'src/pagamento/core/domain/entities/pagamento.entity';
+} from '../../usecases/pagamento/pagamentoDto';
+import { Pagamento } from 'src/pagamento/core/domain/pagamento/entity/pagamento.entity';
 
 export const MERCADO_PAGO_CLIENT = 'MercadoPagoClient';
 

@@ -2,14 +2,14 @@ import { Inject, Injectable } from '@nestjs/common';
 import {
   IPagamentosRepository,
   PAGAMENTOS_REPOSITORY,
-} from '../ports/repositories/pagamentos.repository';
+} from '../../domain/pagamento/repository/pagamentos.repository';
 
-import { CreatePagamentoDto } from '../../../adapter/driven/dto/pagamentoDto';
+import { CreatePagamentoDto } from '../usecases/pagamento/pagamentoDto';
 import { MERCADO_PAGO_CLIENT } from '../ports/clients/mercadopago.client';
-import { IPagamentosClientRepository } from '../ports/repositories/pagamentos-client.repository';
 import { PagamentosException } from '../exceptions/pagamentos.exception';
-import { PedidosService } from 'src/pedido/core/application/services/pedidos.service';
-import { Pagamento } from '../../domain/entities/pagamento.entity';
+import { Pagamento } from '../../domain/pagamento/entity/pagamento.entity';
+import { IPagamentosClientRepository } from '../../domain/pagamento/repository/pagamentos-client.repository';
+import { FindPedidoByIdUseCase } from 'src/pedido/core/application/usecases/pedidoUseCase/find.pedido.by.id.usecase';
 
 @Injectable()
 export class PagamentosService {
@@ -19,17 +19,12 @@ export class PagamentosService {
 
     @Inject(MERCADO_PAGO_CLIENT)
     private pagamentosClient: IPagamentosClientRepository,
-    private pedidoService: PedidosService,
-  ) {
-    this.pagamentosClient = pagamentosClient;
-    this.pagamentosRepository = pagamentosRepository;
-    this.pedidoService = pedidoService;
-  }
+    private findPedidoByIdUseCase: FindPedidoByIdUseCase 
+    ) {  }
 
   async createPagamento(data: CreatePagamentoDto) {
     const description = `Hexafood - pedido ${data.id_pedido} - MercadoPago`;
-
-    const pedido = await this.pedidoService.findById(data.id_pedido);
+    const pedido = await this.findPedidoByIdUseCase.findById(data.id_pedido);
     if (!pedido) {
       throw new PagamentosException('O Pedido informado não existe.');
     }
