@@ -1,4 +1,4 @@
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject } from '@nestjs/common';
 
 import { MERCADO_PAGO_CLIENT } from '../../ports/clients/mercadopago.client';
 import { IPagamentosClientRepository } from 'src/pagamento/core/domain/pagamento/repository/pagamentos-client.repository';
@@ -6,6 +6,7 @@ import { FindPedidoByIdUseCase } from 'src/pedido/core/application/usecases/pedi
 import { PagamentosException } from '../../exceptions/pagamentos.exception';
 import { CreatePagamentoDto } from './pagamentoDto';
 import { IPagamentosRepository, PAGAMENTOS_REPOSITORY } from 'src/pagamento/core/domain/pagamento/repository/pagamentos.repository';
+import { Pagamento } from 'src/pagamento/core/domain/pagamento/entity/pagamento.entity';
   
 export class CreatePagamentoUseCase {
   constructor(
@@ -24,14 +25,12 @@ export class CreatePagamentoUseCase {
       throw new PagamentosException('O Pedido informado não existe.');
     }
 
-    const { id } = await this.pagamentosClient.createPagamento(data);
+    const transacao = await this.pagamentosClient.createPagamento(data);
 
-    return this.pagamentosRepository.createPagamento({
-      valor: data.valor,
-      id_pedido: data.id_pedido,
-      id_transacao: id,
-      plataforma: 'mercadopago',
-      descricao: description,
-    });
-    }
+    return this.pagamentosRepository.createPagamento(
+      new Pagamento(data.id_cliente, data.id_pedido, transacao.id, description, 'mercado_pago', data.valor)
+    )
+  }
 }
+
+

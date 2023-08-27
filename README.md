@@ -477,9 +477,9 @@ Este projeto esta sobe a licença MIT. Veja a [LICENÇA](https://opensource.org/
 
 Feito com ❤️ por:
 
-- [Bruno Padilha]()
+- [Bruno Padilha](https://www.linkedin.com/in/brpadilha/)
 - [Lucas Siqueira](https://www.linkedin.com/in/lucassouzatidev/)
-- [Marayza]()
+- [Marayza](https://www.linkedin.com/in/marayza-gonzaga-7766251b1/)
 - [Mario Celso]()
 - [Rafael Silveira](https://github.com/rafasilveira)
 
