@@ -1,7 +1,7 @@
 import { PrismaClient } from '@prisma/client';
 import { IPagamentosRepository } from '../../core/domain/pagamento/repository/pagamentos.repository';
 import { Pagamento } from '../../core/domain/pagamento/entity/pagamento.entity';
-import { PagamentoDto } from '../../core/application/usecases/pagamento/pagamentoDto';
+import { PagamentoFactory } from 'src/pagamento/core/domain/pagamento/factory/pagamento.factory';
 
 export class PagamentosRepository implements IPagamentosRepository {
   private prisma: PrismaClient;
@@ -9,8 +9,8 @@ export class PagamentosRepository implements IPagamentosRepository {
   constructor() {
     this.prisma = new PrismaClient();
   }
-  createPagamento(data: Pagamento): Promise<Pagamento> {
-    return this.prisma.pagamento.create({
+  async createPagamento(data: Pagamento): Promise<Pagamento> {
+    const createdPagamento = this.prisma.pagamento.create({
       data: {
         id_pedido: data.id_pedido,
         id_transacao: data.id_transacao,
@@ -20,19 +20,14 @@ export class PagamentosRepository implements IPagamentosRepository {
         id_cliente: data.id_cliente || null,
       },
     });
+
+    return PagamentoFactory.create(createdPagamento);
   }
 
   findAll(): Promise<Pagamento[]> {
     return this.prisma.pagamento.findMany().then((results) => {
       return results.map((result) => {
-        const pagamento = new Pagamento();
-        pagamento.id = result.id;
-        pagamento.id_cliente = result.id_cliente;
-        pagamento.valor = result.valor;
-        pagamento.id_pedido = result.id_pedido;
-        pagamento.id_transacao = result.id_transacao;
-        pagamento.descricao = result.descricao;
-        pagamento.plataforma = result.plataforma;
+        const pagamento = PagamentoFactory.create(result);
         pagamento.createdAt = result.createdAt;
         pagamento.updatedAt = result.updatedAt;
         return pagamento;
@@ -43,14 +38,7 @@ export class PagamentosRepository implements IPagamentosRepository {
   findById(id: number): Promise<Pagamento | null> {
     return this.prisma.pagamento.findFirst({ where: { id } }).then((result) => {
       if (result) {
-        const pagamento = new Pagamento();
-        pagamento.id = result.id;
-        pagamento.id_cliente = result.id_cliente;
-        pagamento.valor = result.valor;
-        pagamento.id_pedido = result.id_pedido;
-        pagamento.id_transacao = result.id_transacao,
-        pagamento.descricao = result.descricao;
-        pagamento.plataforma = result.plataforma;
+        const pagamento = PagamentoFactory.create(result);
         pagamento.createdAt = result.createdAt;
         pagamento.updatedAt = result.updatedAt;
         return pagamento;
@@ -65,5 +53,6 @@ export class PagamentosRepository implements IPagamentosRepository {
         id,
       },
     });
+    
   }
 }

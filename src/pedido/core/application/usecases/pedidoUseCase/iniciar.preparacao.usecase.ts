@@ -13,8 +13,9 @@ export class IniciarPreparacaoPedidoUseCase {
     ) {}
   
 async execute(id: number): Promise<Pedido> {
+  console.log("chegou aqui");
+
     const pedido = await this.findPedidoByIdUseCase.findById(id);
-   console.log("chegou aqui");
 
     pedido.status = StatusPedido.EM_PREPARACAO;
     return this.pedidosRepository.update(id, pedido);

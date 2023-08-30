@@ -1,4 +1,3 @@
-import { PagamentoDto } from 'src/pagamento/core/application/usecases/pagamento/pagamentoDto';
 import { Pagamento } from '../entity/pagamento.entity';
 
 export const PAGAMENTOS_REPOSITORY = 'IPagamentosRepository';

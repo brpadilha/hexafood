@@ -24,7 +24,6 @@ export class CreatePagamentoUseCase {
     if (!pedido) {
       throw new PagamentosException('O Pedido informado não existe.');
     }
-
     const transacao = await this.pagamentosClient.createPagamento(data);
 
     return this.pagamentosRepository.createPagamento(

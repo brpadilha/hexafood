@@ -1,8 +1,6 @@
 import { forwardRef, Module } from '@nestjs/common';
 import { PagamentosController } from './infraestructure/controller/pagamentos.controller';
-import { PagamentosService } from './core/application/services/pagamentos.service';
 import { PAGAMENTOS_REPOSITORY } from './core/domain/pagamento/repository/pagamentos.repository';
-import { PagamentosRepository } from './infraestructure/gateway/pagamentos.repository';
 import {
   MERCADO_PAGO_CLIENT,
   MercadoPagoClient,
@@ -12,6 +10,9 @@ import { ValidationFilter } from './infraestructure/filter/validation.filter';
 import { APP_FILTER } from '@nestjs/core';
 import { IdentificacaoModule } from 'src/identificacao/identificacao.module';
 import { FindPedidoByIdUseCase } from 'src/pedido/core/application/usecases/pedidoUseCase/find.pedido.by.id.usecase';
+import { CreatePagamentoUseCase } from './core/application/usecases/pagamento/create.pagamento.usecase';
+import { PagamentosRepository } from './infraestructure/gateway/pagamentos.repository';
+import { UpdatePedidoUseCase } from 'src/pedido/core/application/usecases/pedidoUseCase/update.pedido.usecase';
 
 @Module({
   imports: [ forwardRef(() => PedidoModule), forwardRef(() => IdentificacaoModule)],
@@ -24,8 +25,12 @@ import { FindPedidoByIdUseCase } from 'src/pedido/core/application/usecases/pedi
       provide: FindPedidoByIdUseCase,
       useClass: FindPedidoByIdUseCase,
     },
-    PagamentosService,
+    {
+      provide: UpdatePedidoUseCase,
+      useClass: UpdatePedidoUseCase,
+    },
+    CreatePagamentoUseCase,
   ],
-  exports: [PagamentosService], // Exportando o serviço para uso em outros módulos
+  exports: [CreatePagamentoUseCase, PAGAMENTOS_REPOSITORY, MERCADO_PAGO_CLIENT], // Exportando o serviço para uso em outros módulos
 })
 export class PagamentoModule {}

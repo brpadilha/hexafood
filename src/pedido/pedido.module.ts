@@ -33,6 +33,8 @@ import { FindAllProdutosUseCase } from './core/application/usecases/produtoUseCa
 import { FindByIdProdutoUseCase } from './core/application/usecases/produtoUseCase/find.by.id.produto.usecase';
 import { FindByIdsProdutosUseCase } from './core/application/usecases/produtoUseCase/find.by.ids.produtos.usecase';
 import { UpdateProdutoUseCase } from './core/application/usecases/produtoUseCase/update.produto.usecase';
+import { CreatePagamentoUseCase } from 'src/pagamento/core/application/usecases/pagamento/create.pagamento.usecase';
+import { UpdatePedidoUseCase } from './core/application/usecases/pedidoUseCase/update.pedido.usecase';
 
 @Module({
   imports: [ forwardRef(() => IdentificacaoModule), forwardRef(() => PagamentoModule) ],
@@ -53,6 +55,10 @@ import { UpdateProdutoUseCase } from './core/application/usecases/produtoUseCase
        provide: FindClienteUseCase, 
        useClass: FindClienteUseCase,
     },
+    {
+      provide: CreatePagamentoUseCase, 
+      useClass: CreatePagamentoUseCase,
+   },
     CreateCategoriaUseCase,
     FindAllCategoriaUseCase,
     FindByIdCategoriaUseCase,
@@ -71,8 +77,9 @@ import { UpdateProdutoUseCase } from './core/application/usecases/produtoUseCase
     FindByIdProdutoUseCase,
     FindByIdsProdutosUseCase,
     UpdateProdutoUseCase,
-    NovoPedidoListener
+    NovoPedidoListener,
+    UpdatePedidoUseCase
   ],
-  exports: [FindPedidoByIdUseCase, IPedidosRepository],
+  exports: [FindPedidoByIdUseCase, UpdatePedidoUseCase, IPedidosRepository],
 })
 export class PedidoModule {}
