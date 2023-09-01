@@ -17,9 +17,9 @@ spec:
           image: marayza/hexafoodk8s:v15
           ports:
             - containerPort: 3000
-          command: ["/bin/sh", "-c"]
+          command: ['/bin/sh', '-c']
           args:
-            - "./wait-for-it.sh postgres-service:5432 -- ./start.sh"
+            - './wait-for-it.sh postgres-service:5432 -- ./start.sh'
           envFrom:
             - secretRef:
                 name: postgres-secret
@@ -32,7 +32,7 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-metadata: 
+metadata:
   name: api-lb-service
 spec:
   type: LoadBalancer
@@ -42,5 +42,3 @@ spec:
       targetPort: 3000
   selector:
     app: api
-
-  
