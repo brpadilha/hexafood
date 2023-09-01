@@ -21,4 +21,6 @@ export class CreatePagamentoDto {
   };
 
   id_cliente?: number;
+
+  status?: string;
 }

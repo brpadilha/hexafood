@@ -9,4 +9,6 @@ export interface IPagamentosRepository {
   findAll(): Promise<Pagamento[]>;
 
   remove(id: number): Promise<unknown>;
+
+  update(id:number,status: string): Promise<unknown>;
 }

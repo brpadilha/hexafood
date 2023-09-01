@@ -10,7 +10,7 @@ export class PagamentosController {
   constructor(
     private readonly createPagamentoUseCase: CreatePagamentoUseCase,
     private readonly findPagamentoUseCase: FindPagamentoUseCase
-
+    private readonly updatePagamentoUseCase: UpdatePagamentoUseCase,
   ) {}
   
   @Post()
@@ -22,5 +22,7 @@ export class PagamentosController {
   findOne(@Param('id') id: string) {
     return this.findPagamentoUseCase.execute(+id);
   }
+
+
 
 }
