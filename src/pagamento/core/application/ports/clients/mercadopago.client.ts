@@ -68,4 +68,8 @@ export class MercadoPagoClient implements IPagamentosRepository {
   remove(id: number) {
     return this.pagamentosRepository.remove(id);
   }
+
+  update(id: number, status: string) {
+    return this.pagamentosRepository.update(id, status);
+  }
 }
