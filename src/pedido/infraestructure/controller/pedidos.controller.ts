@@ -56,20 +56,14 @@ export class PedidosController {
 
   @Patch(':id/finalizar_preparacao')
   async finalizarPreparacaoPedido(@Param('id') id: number) {
-    // const idAsNumber = parseInt(id, 10);
-    // if (isNaN(idAsNumber)) {
-    //   throw new BadRequestException(`Invalid id: ${id}`);
-    // }
-    return this.finalizarPreparacaoPedidoUseCase.execute(id);
+
+    return this.finalizarPreparacaoPedidoUseCase.execute(Number(id));
   }
 
   @Patch(':id/finalizar_pedido')
   async finalizarPedido(@Param('id') id: number) {
-    // const idAsNumber = parseInt(id, 10);
-    // if (isNaN(idAsNumber)) {
-    //   throw new BadRequestException(`Invalid id: ${id}`);
-    // }
-    return this.finalizarPedidoUseCase.execute(id);
+
+    return this.finalizarPedidoUseCase.execute(Number(id));
   }
 
   @Get(':codigo_pedido')
