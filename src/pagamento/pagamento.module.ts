@@ -13,6 +13,7 @@ import { FindPedidoByIdUseCase } from 'src/pedido/core/application/usecases/pedi
 import { CreatePagamentoUseCase } from './core/application/usecases/pagamento/create.pagamento.usecase';
 import { PagamentosRepository } from './infraestructure/gateway/pagamentos.repository';
 import { UpdatePedidoUseCase } from 'src/pedido/core/application/usecases/pedidoUseCase/update.pedido.usecase';
+import { FindPagamentoUseCase } from './core/application/usecases/pagamento/find.pagamento.usecase';
 
 @Module({
   imports: [ forwardRef(() => PedidoModule), forwardRef(() => IdentificacaoModule)],
@@ -30,6 +31,7 @@ import { UpdatePedidoUseCase } from 'src/pedido/core/application/usecases/pedido
       useClass: UpdatePedidoUseCase,
     },
     CreatePagamentoUseCase,
+    FindPagamentoUseCase
   ],
   exports: [CreatePagamentoUseCase, PAGAMENTOS_REPOSITORY, MERCADO_PAGO_CLIENT], // Exportando o serviço para uso em outros módulos
 })
