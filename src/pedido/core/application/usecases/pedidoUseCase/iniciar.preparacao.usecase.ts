@@ -13,7 +13,6 @@ export class IniciarPreparacaoPedidoUseCase {
     ) {}
   
 async execute(id: number): Promise<Pedido> {
-  console.log("chegou aqui");
 
     const pedido = await this.findPedidoByIdUseCase.findById(id);
 
@@ -21,11 +20,5 @@ async execute(id: number): Promise<Pedido> {
     return this.pedidosRepository.update(id, pedido);
   }
 
-  // converterId(id: string ){
-  //   const idAsNumber = parseInt(id, 10);
-  //   if (isNaN(idAsNumber)) {
-  //     throw new BadRequest(`Invalid id: ${id}`);
-  //   }
-  // }
 }
 

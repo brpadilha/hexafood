@@ -8,11 +8,11 @@ export class FindPedidoByIdUseCase {
       private pedidosRepository: IPedidosRepository,
     ) {}
     
-findById(id: number) {
-    const pedido = this.pedidosRepository.findById(id);
-    if (!pedido) {
-      throw new PedidoException('Pedido não encontrado.');
-    }  
-    return pedido;  
+    findById(id: number) {
+      const pedido = this.pedidosRepository.findById(id);
+      if (!pedido) {
+        throw new PedidoException('Pedido não encontrado.');
+      }  
+      return pedido;  
   }
 }

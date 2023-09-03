@@ -50,7 +50,8 @@ export class PedidosController {
 
   @Patch(':id/iniciar_preparacao')
   async iniciarPreparacaoPedido(@Param('id') id: number) {
-    return this.iniciarPreparacaoPedidoUseCase.execute(id);
+
+    return this.iniciarPreparacaoPedidoUseCase.execute(Number(id));
   }
 
   @Patch(':id/finalizar_preparacao')
