@@ -5,6 +5,14 @@ export class PagamentoDto extends Pagamento {
   id?: number;
 }
 
+export class UpdatePagamentoDto {
+  @ApiProperty()
+  id?: number;
+  @ApiProperty()
+  status: string;
+
+  id_pedido?: number;
+}
 export class CreatePagamentoDto {
   id?: number;
   @ApiProperty()

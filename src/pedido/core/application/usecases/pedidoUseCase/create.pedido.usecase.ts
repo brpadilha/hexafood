@@ -25,7 +25,6 @@ export class CreatePedidoUseCase {
 
     const { id } = await this.pedidosRepository.create(pedido);
     pedido.id = id;
-    console.log('Novo pedido criado: ', pedido);
     this.eventEmitter.emit('novo.pedido', new NovoPedidoEvent(pedido));
 
     return pedido;

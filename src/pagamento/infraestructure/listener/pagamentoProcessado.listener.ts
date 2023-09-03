@@ -7,7 +7,7 @@ export class PagamentoProcessado {
     private updatePagamentoUseCase: UpdatePagamentoUseCase,
   ) {}
 
-  @OnEvent('pagamento.created')
+  @OnEvent('pagamento.processado')
   async handle(event: CreatePagamentoDto) {
 
     const {status, id_pedido} = event;
@@ -15,7 +15,7 @@ export class PagamentoProcessado {
       {
         id: event.id,
         status: status,
-        id_pedido: id_pedido
+        id_pedido
       }
     );
 
