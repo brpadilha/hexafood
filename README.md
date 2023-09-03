@@ -8,14 +8,12 @@
 - <a href="#boat-sobre-o-projeto">Sobre o projeto</a>
 - <a href="#hammer-tecnologias">Tecnologias</a>
 - <a href="#rocket-como-rodar-esse-projeto">Como rodar esse projeto</a>
-- <a href="#electric_plug-arquitetura-hexagonal-ports-and-adapters">Arquitetura Hexagonal (Ports and Adapters)</a>
-- <a href="#open_file_folder-arquitetura-na-prática">Arquitetura na prática</a>
+- <a href="#electric_plug-infraestrutura-k8s">Infraestrutura K8S</a>
+- <a href="#open_file_folder-clean-architecture-na-pratica">Clean Architecture na prática</a>
 - <a href="#notebook-lógica-de-negócio-domínio-aplicada">Lógica de negócio (domínio) aplicada</a>
     - <a href="#identificação">Identificação</a>
     - <a href="#pedido">Pedido</a>
     - <a href="#pagamento">Pagamento</a>
-- <a href="#no_entry_sign-exceções-e-validações">Exceções e Validações</a>
-- <a href="#microscope-testabilidade">Testabilidade</a>
 - <a href="#bookmark_tabs-licença">Licença</a>
 - <a href="#wink-autores">Autores</a>
 ## :boat: Sobre o projeto
@@ -88,7 +86,7 @@ spec:
       restartPolicy: OnFailure
 ```
 
-## :open_file_folder: Clean Architecture
+## :open_file_folder: Clean Architecture na prática
 
 A Clean Architecture é um conjunto de princípios de design de software que busca promover a separação de preocupações e a criação de sistemas desacoplados e testáveis. Concebida por Robert C. Martin ("Uncle Bob"), essa arquitetura prioriza a independência de frameworks, interfaces de usuário e bancos de dados, colocando as regras de negócio no centro do design. Assim, permite uma maior flexibilidade e facilidade de manutenção, tornando o sistema mais robusto e adaptável a mudanças.
 
@@ -411,129 +409,56 @@ Na criação do pedido é disparado o evento NovoPedidoEvent que recebe o pedido
 @Injectable()
 export class NovoPedidoListener {
   constructor(
-    @Inject(IPedidosRepository)
-    private pedidosRepository: IPedidosRepository,
-    private pagamentosService: PagamentosService,
+    private createPagamentoUseCase: CreatePagamentoUseCase,
   ) {}
 
   @OnEvent('novo.pedido')
   async handle(event: NovoPedidoEvent) {
     const pedido = event.pedido;
     //lógica de criação de DTO para criação do pagametno
-   ...
 
-   //Tenta criar um novo pagamento
-    try {
-      const pagamento = await this.pagamentosService.createPagamento(
-        pagamentoDto,
-      );
-      console.log('Pagamento criado: ', pagamento);
-      //Se der certo, atualiza o status do pedido para RECEBIDO
-      pedido.status = StatusPedido.RECEBIDO;
-      await this.pedidosRepository.update(pedido.id, pedido);
-      console.log('Pedido atualizado: ', pedido);
-    } catch (error) {
-      console.log(error);
-      //Se der algum erro no pagamento, atualiza o status do pedido para CANCELADO
-      pedido.status = StatusPedido.CANCELADO;
-      await this.pedidosRepository.update(pedido.id, pedido);
-      console.log('Pedido atualizado: ', pedido);
+    if (pedido.cliente) {
+      pagamentoDto.cliente = {
+        id: pedido.cliente.id,
+        nome: pedido.cliente.nome,
+        cpf: pedido.cliente.cpf,
+      };
     }
-  }
-}
-
-```
-O NovoPedidoListener tenta se comunicar com o cliente de pagamento através da classe PagamentosService do módulo de Pagamentos. A lógica de comunicação com o gateway do Mercado pago está implementada nessa classe. Se por acaso algum erro acontecer durante o processamento do pagamento,o pedido passa ter o STATUS "CANCELADO" e não vai para fila de preparação. Futuramente, lógicas adicionais para tratento de pedidos cancelados podem ser implementadas.
-
-## :no_entry_sign: Exceções e Validações
-
-Assim como no DDD, um dos principais objetivos da Arquitetura Hexagonal é separar a complexidade de implementação (camada de infraestrutura) da camada de negócio. Isso deve nortear todo design de código, incluindo as validações e exceções.
-
-Nesse projeto a validação é feita pela camada de domínio, mas em específico nas classes services. Quando algo não passar por alguma validação, do ponto de vista de negócio isso é uma exceção. Dessa forma, é disparado uma exceção personalizada, conforme exemplo a seguir:
-```ts
-async create(cliente: Cliente) {
-    if (!cliente.nome || cliente.nome.trim() === '')
-      throw new ClienteException('O nome não pode ser vazio');
-
-    if (!cliente.cpf || cliente.cpf.length != 11)
-      throw new ClienteException('CPF precisa ter exatamente 11 caracteres');
-
-    if (cliente.cpf && (await this.clientesRepository.existsByCpf(cliente.cpf)))
-      throw new ClienteException('CPF já cadastrado.');
-
-    return this.clientesRepository.create(cliente);
-  }
-```
-
-Nessa abordagem, a camada de domínio apenas dispara a exceção e não se preocupa o que fazer com essa exceção. Ou seja, ela informa que houve uma exceção para outra camada que a chamou, agora fica a critério dessa outra camada tratar essa exceção. 
-
-Nesse projeto, foi utilizado um recurso do próprio NestJS para tratamento de exceções chamado "ExceptionFilter". Foi criado uma classe chamada "ValidationFilter" captura automaticamente as exceções de validação, e retorna uma mensagem formatada para API com status code 400:
-```ts
-@Catch(ClienteException)
-export class ValidationFilter implements ExceptionFilter {
-  catch(exception: Error, host: ArgumentsHost) {
-    const ctx = host.switchToHttp();
-    const response = ctx.getResponse<Response>();
-    const request = ctx.getRequest<Request>();
-
-    response.status(400).json({
-      statusCode: 400,
-      timestamp: new Date().toISOString(),
-      path: request.url,
-      error: exception.message,
-    });
+    //chama o usse case para criar pagamento
+      return this.createPagamentoUseCase.execute(
+          pagamentoDto,
+        );
   }
 }
 ```
-```json
-{
-  "statusCode": 400,
-  "timestamp": "2023-07-09T20:50:02.056Z",
-  "path": "/clientes",
-  "error": "O nome não pode ser vazio"
+Diferente a primeira implementação, na Fase 02 o listener NovoPedidoListener passa a ser responsável apenas para chamar o fluxo de criação de pagamentos, mas deixa de ser responsável por atualizar o pedido. A fim de representar o funcionamento de um Webhook, foi criado um outro evento chamado "PagamentoProcessado". Esse evento deve ser disparado a partir de um retorno da API de pagamento, na qual é chamado o "UpdatePagamentoUseCase", verifica o status do pagamento e chama o use case de atualização do pedido:
+```ts
+export class UpdatePagamentoUseCase {
+  ...
+
+  async execute(data: Pick<PagamentoDto, 'id'|'id_pedido' | 'status'>) {
+    const { status, id_pedido, id } = data
+    const pedido = await this.FindPedidoByIdUseCase.findById(id_pedido)
+    if (!pedido) {
+      throw new PagamentosException('O Pedido informado não existe.');
+    }
+    if(status === 'APROVADO'){
+      pedido.status = StatusPedido.RECEBIDO
+      await this.updatePedidoUseCase.execute(pedido);
+    }else{
+      pedido.status = StatusPedido.CANCELADO
+      await this.updatePedidoUseCase.execute(pedido);
+    }
+    return this.pagamentosRepository.update(id, status)
+  }
 }
 ```
-Dessa forma, transferimos a complexidade de implementação de um retorno da API para camada de infraestrutura, mantendo a camada de domínio desacoplada e limpa.
-## :microscope: Testabilidade
-
-Considerando o uso de portas para a camada de serviços do coração do software se comunicar com serviços externos, torna-se o possível do uso de injeção de dependência para mudar o comportamento padrão do sistema e dessa forma fazer testes de unidades totalmente independentes. Como por exemplo no teste de ClientesService foi injetado um repositório de clientes em memória para que não precisássemos de banco de dados durante os testes de unitários, dessa forma reforçando o conceito de pirâmide testes:
-
-```ts
-import { Test, TestingModule } from '@nestjs/testing';
-import { IClientesRepository } from '../../src/identificacao/core/application/ports/repositories/clientes.repository';
-import { ClientesService } from '../../src/identificacao/core/application/services/clientes.service';
-import { InMemoryClientesRepository } from '../../src/identificacao/adapter/driven/infrastructure/in-memory-clientes.repository';
-import { Cliente } from '../../src/identificacao/core/domain/clientes/entities/cliente.entity';
-
-describe('ClientesService', () => {
-  let service: ClientesService;
-  let repository: IClientesRepository;
-
-  beforeEach(async () => {
-    const module: TestingModule = await Test.createTestingModule({
-      providers: [
-        //Nessa parte do código, injetamos o adapter InMemoryClientesRepository na porta IClientesRepository, para alterar o comportamento padrão do sistema e realizar os testes de unidade de ClientesService
-        {
-          provide: IClientesRepository,
-          useClass: InMemoryClientesRepository,
-        },
-        ClientesService,
-      ],
-    }).compile();
-
-    repository = module.get<IClientesRepository>(IClientesRepository);
-    service = module.get<ClientesService>(ClientesService);
-  });
-
-  describe('create', () => {
-    it('should create a new client and return it', async () => {
-      const clienteData: Cliente = { id: 1, nome: 'Sr. Teste 1', cpf: '123' };
-      const result = await service.create(clienteData);
-      expect(result).toEqual(clienteData);
-    });
-  });
-});
-```
+O restante da lógica se mantém, sendo caso o pagamento seja aprovado, o pedido passa a ter o status "RECEBIDO" ficando disponível para preparação não seja aprovado, e caso não seja aprovado, o pedido tem o status "CANCELADO" e não avança para fila de preparação. Uma representação visual desse fluxo consta na figura a seguir:
+<br>
+<h4 align="center">
+    <img alt="Fluxo de pagamentos" title="fluxo-pagamento" src=".github/readme/fluxo_pagamento.jpg" width="1864px" />
+</h4>
+<br>
 
 ## :bookmark_tabs: Licença
 
@@ -547,6 +472,5 @@ Feito com ❤️ por:
 - [Lucas Siqueira](https://www.linkedin.com/in/lucassouzatidev/)
 - [Marayza](https://www.linkedin.com/in/marayza-gonzaga-7766251b1/)
 - [Mario Celso]()
-- [Rafael Silveira](https://github.com/rafasilveira)
 
 [Voltar ao topo](#índice)
