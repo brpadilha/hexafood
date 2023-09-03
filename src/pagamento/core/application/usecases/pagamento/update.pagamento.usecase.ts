@@ -1,37 +1,43 @@
 import { Inject } from '@nestjs/common';
 
-import { MERCADO_PAGO_CLIENT } from '../../ports/clients/mercadopago.client';
-import { IPagamentosClientRepository } from 'src/pagamento/core/domain/pagamento/repository/pagamentos-client.repository';
 import { PagamentosException } from '../../exceptions/pagamentos.exception';
 import { PagamentoDto } from './pagamentoDto';
 import { IPagamentosRepository, PAGAMENTOS_REPOSITORY } from 'src/pagamento/core/domain/pagamento/repository/pagamentos.repository';
-import { FindPagamentoUseCase } from './find.pagamento.usecase';
+import { UpdatePedidoUseCase } from 'src/pedido/core/application/usecases/pedidoUseCase/update.pedido.usecase';
+import { FindPedidoByIdUseCase } from 'src/pedido/core/application/usecases/pedidoUseCase/find.pedido.by.id.usecase';
+import { StatusPedido } from 'src/pedido/core/domain/enum/status-pedido.enum';
 
 export class UpdatePagamentoUseCase {
   constructor(
+    @Inject(
+      UpdatePedidoUseCase
+    )
+    private updatePedidoUseCase: UpdatePedidoUseCase,
+
+    @Inject(
+      FindPedidoByIdUseCase
+    )
+    private FindPedidoByIdUseCase: FindPedidoByIdUseCase,
+
     @Inject(PAGAMENTOS_REPOSITORY)
     private pagamentosRepository: IPagamentosRepository,
 
-    @Inject(MERCADO_PAGO_CLIENT)
-    private pagamentosClient: IPagamentosClientRepository,
-    private findPagamentoByIdUseCase: FindPagamentoUseCase
   ) { }
 
-  async execute(data: PagamentoDto) {
-    const pedido = await this.findPagamentoByIdUseCase.execute(data.id);
+  async execute(data: Pick<PagamentoDto, 'id'|'id_pedido' | 'status'>) {
+    const { status, id_pedido, id } = data
+    const pedido = await this.FindPedidoByIdUseCase.findById(id_pedido)
     if (!pedido) {
       throw new PagamentosException('O Pedido informado não existe.');
     }
-    // listener de pagamento
-    // atualizar pagamento
-    let StatusPedido = 'pendente';
-    let listener = 'APROVADO'
-    if(listener !== 'APROVADO') {
-      StatusPedido = 'reprovado'
-    }else {
-      StatusPedido = 'aprovado'
+    if(status === 'APROVADO'){
+      pedido.status = StatusPedido.RECEBIDO
+      await this.updatePedidoUseCase.execute(pedido);
+    }else{
+      pedido.status = StatusPedido.CANCELADO
+      await this.updatePedidoUseCase.execute(pedido);
     }
-    return this.pagamentosRepository.update(data.id, StatusPedido)
+    return this.pagamentosRepository.update(id, status)
   }
 }
 

@@ -18,6 +18,7 @@ export class PagamentosRepository implements IPagamentosRepository {
         plataforma: data.plataforma,
         valor: data.valor,
         id_cliente: data.id_cliente || null,
+        status: data.status,
       },
     });
 
@@ -54,5 +55,16 @@ export class PagamentosRepository implements IPagamentosRepository {
       },
     });
     
+  }
+
+  async update(id: number, status: string) {
+    return this.prisma.pagamento.update({
+      where: {
+        id,
+      },
+      data: {
+        status,
+      },
+    });
   }
 }

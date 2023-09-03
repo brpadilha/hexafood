@@ -9,8 +9,7 @@ import { FindPagamentoUseCase } from 'src/pagamento/core/application/usecases/pa
 export class PagamentosController {
   constructor(
     private readonly createPagamentoUseCase: CreatePagamentoUseCase,
-    private readonly findPagamentoUseCase: FindPagamentoUseCase
-    private readonly updatePagamentoUseCase: UpdatePagamentoUseCase,
+    private readonly findPagamentoUseCase: FindPagamentoUseCase,
   ) {}
   
   @Post()

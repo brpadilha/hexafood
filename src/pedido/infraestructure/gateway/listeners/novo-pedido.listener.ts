@@ -9,7 +9,6 @@ import { UpdatePedidoUseCase } from 'src/pedido/core/application/usecases/pedido
 export class NovoPedidoListener {
   constructor(
     private createPagamentoUseCase: CreatePagamentoUseCase,
-    private updatePedidoUseCase: UpdatePedidoUseCase
   ) {}
 
   @OnEvent('novo.pedido')
@@ -28,21 +27,8 @@ export class NovoPedidoListener {
         cpf: pedido.cliente.cpf,
       };
     }
-    try {
-      const pagamento = await this.createPagamentoUseCase.execute(
-        pagamentoDto,
-      );
-      console.log('Pagamento criado: ', pagamento);
-
-      pedido.status = StatusPedido.RECEBIDO;
-      await this.updatePedidoUseCase.execute(pedido);
-      console.log('Pedido atualizado: ', pedido);
-      
-    } catch (error) {
-      console.log(error);
-      pedido.status = StatusPedido.CANCELADO;
-      await this.updatePedidoUseCase.execute(pedido);
-      console.log('Pedido atualizado: ', pedido);
-    }
+      return this.createPagamentoUseCase.execute(
+          pagamentoDto,
+        );
   }
 }

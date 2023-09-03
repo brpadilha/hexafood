@@ -14,8 +14,8 @@ export class Pagamento {
   createdAt?: Date;
   cliente?: Cliente;
   pedido?: Pedido;
-  status?: string;
-  constructor(id_cliente: number, id_pedido: number, id_transacao: bigint, descricao: string, plataforma: string, valor: number, status?: string) {
+  status: string;
+  constructor(id_cliente: number, id_pedido: number, id_transacao: bigint, descricao: string, plataforma: string, valor: number, status: string) {
     this.id_cliente = id_cliente;
     this.id_pedido = id_pedido;
     this.id_transacao = id_transacao;
@@ -45,7 +45,10 @@ export class Pagamento {
     if (!this.valor) {
       throw new PagamentosException('O valor não pode ser vazio');
     }
-  
+    if (!this.status) {
+      throw new PagamentosException('O status não pode ser vazio');
+    }
+
   }
   
 }
