@@ -19,7 +19,7 @@ export class PagamentosController {
 
   @Get(':id')
   findOne(@Param('id') id: number) {
-    return this.findPagamentoUseCase.execute(+id);
+    return this.findPagamentoUseCase.execute(Number(id));
   }
 
 

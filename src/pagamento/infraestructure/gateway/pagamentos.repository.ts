@@ -10,7 +10,8 @@ export class PagamentosRepository implements IPagamentosRepository {
     this.prisma = new PrismaClient();
   }
   async createPagamento(data: Pagamento): Promise<Pagamento> {
-    const createdPagamento = this.prisma.pagamento.create({
+    console.log(data)
+    const createdPagamento = await this.prisma.pagamento.create({
       data: {
         id_pedido: data.id_pedido,
         id_transacao: data.id_transacao,
@@ -37,21 +38,16 @@ export class PagamentosRepository implements IPagamentosRepository {
   }
 
   async findById(id: number): Promise<Pagamento | null> {
-    const pagamento = await this.prisma.pagamento.findUnique({ where: { id } })
+    const pagamentos = await this.prisma.pagamento.findMany()
+    console.log(pagamentos)
+    const pagamento = pagamentos.find((pagamento) => pagamento.id === id);
+  
     if (pagamento) {
       console.log(pagamento)
       return PagamentoFactory.create(pagamento);
     }
       return null;
-    // .then((result) => {
-    //   if (result) {
-    //     const pagamento = PagamentoFactory.create(result);
-    //     pagamento.createdAt = result.createdAt;
-    //     pagamento.updatedAt = result.updatedAt;
-    //     return pagamento;
-    //   }
-    //   return null;
-    // });
+
   }
 
   async remove(id: number) {

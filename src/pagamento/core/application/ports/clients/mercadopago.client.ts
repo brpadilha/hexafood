@@ -39,25 +39,22 @@ export class MercadoPagoClient implements IPagamentosRepository {
           }
         : null;
 
-    return await mercadopago.payment.create({
+    const transaction = await mercadopago.payment.create({
       transaction_amount: valor,
       description: descricao,
       payment_method_id: 'pix',
       ...(payer && { payer }),
     });
 
-    // const pagamento = new Pagamento(
-    //   cliente.id,
-    //   id_pedido,
-    //   Number(transaction.id),
-    //   descricao,
-    //   'MercadoPago',
-    //   valor,
-    //   transaction.status,
-    // )
-    
-    // this.pagamentosRepository.createPagamento(pagamento);
-
+    return this.pagamentosRepository.createPagamento(new Pagamento(
+      cliente.id,
+      id_pedido,
+      transaction.id,
+      descricao,
+      'MercadoPago',
+      valor,
+      transaction.status,
+    ));
 
   }
 
