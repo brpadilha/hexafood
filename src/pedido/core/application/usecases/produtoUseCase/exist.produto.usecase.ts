@@ -1,12 +1,13 @@
 import { IProdutosRepository } from 'src/pedido/core/domain/repository/produtos.repository';
-import { FindByIdProdutoUseCase } from './find.by.id.produto.usecase';
+import { Inject } from '@nestjs/common';
 
 export class ExistProdutoUseCase {
-  constructor(private produtosRepository: IProdutosRepository,
-    private readonly findByIdProdutoUseCase: FindByIdProdutoUseCase) {}
-
+  constructor(
+    @Inject(IProdutosRepository)
+    private produtosRepository: IProdutosRepository,
+  ) {}
   async execute(id: number) {
-    const produto = await this.findByIdProdutoUseCase.execute(id);
+    const produto = await this.produtosRepository.findById(id);
     if (!produto) {
       return false;
     }
