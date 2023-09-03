@@ -10,7 +10,7 @@ export class CreateCategoriaUseCase {
     private categoriasRepository: ICategoriasRepository
     ) {}
 
-  async create(createCategoriaDto: InputCategoriaDto) {
+  async execute(createCategoriaDto: InputCategoriaDto) {
     
     const exists = await this.categoriasRepository.existsByName(createCategoriaDto.nome);
     if (exists) {
