@@ -6,7 +6,7 @@ import {
 
 import mercadopago from '../../../../../mocks/mercadoPagoMockService';
 import {
-  CreatePagamentoDto,
+  CreatePagamentoDto, OutPutPagamentoDto,
 } from '../../usecases/pagamento/pagamentoDto';
 import { Pagamento } from 'src/pagamento/core/domain/pagamento/entity/pagamento.entity';
 
@@ -62,7 +62,7 @@ export class MercadoPagoClient implements IPagamentosRepository {
     return this.pagamentosRepository.findAll();
   }
 
-  findById(id: number): Promise<Pagamento> {
+  findById(id: number): Promise<OutPutPagamentoDto> {
     return this.pagamentosRepository.findById(id);
   }
   remove(id: number) {

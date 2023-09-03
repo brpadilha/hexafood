@@ -41,14 +41,18 @@ export class PagamentosRepository implements IPagamentosRepository {
     });
   }
 
-  async findById(id: number): Promise<Pagamento | null> {
+  async findById(id: number): Promise<OutPutPagamentoDto | null> {
     const pagamentos = await this.prisma.pagamento.findMany()
     console.log(pagamentos)
     const pagamento = pagamentos.find((pagamento) => pagamento.id === id);
   
     if (pagamento) {
       console.log(pagamento)
-      return PagamentoFactory.create(pagamento);
+      const pagamentoFactory = PagamentoFactory.create(pagamento);
+      return {
+        ...pagamentoFactory,
+        id_transacao: pagamento.id_transacao.toString(),
+      }
     }
       return null;
 
