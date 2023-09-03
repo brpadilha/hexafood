@@ -2,6 +2,7 @@ import { PrismaClient } from '@prisma/client';
 import { IPagamentosRepository } from '../../core/domain/pagamento/repository/pagamentos.repository';
 import { Pagamento } from '../../core/domain/pagamento/entity/pagamento.entity';
 import { PagamentoFactory } from 'src/pagamento/core/domain/pagamento/factory/pagamento.factory';
+import { OutPutPagamentoDto } from 'src/pagamento/core/application/usecases/pagamento/pagamentoDto';
 
 export class PagamentosRepository implements IPagamentosRepository {
   private prisma: PrismaClient;
@@ -9,8 +10,8 @@ export class PagamentosRepository implements IPagamentosRepository {
   constructor() {
     this.prisma = new PrismaClient();
   }
-  async createPagamento(data: Pagamento): Promise<Pagamento> {
-    console.log(data)
+  async createPagamento(data: Pagamento): Promise<OutPutPagamentoDto> {
+
     const createdPagamento = await this.prisma.pagamento.create({
       data: {
         id_pedido: data.id_pedido,
@@ -23,7 +24,10 @@ export class PagamentosRepository implements IPagamentosRepository {
       },
     });
 
-    return PagamentoFactory.create(createdPagamento);
+    return PagamentoFactory.create({
+      ...createdPagamento,
+      id_transacao: createdPagamento.id_transacao.toString(),
+    });
   }
 
   findAll(): Promise<Pagamento[]> {

@@ -73,12 +73,12 @@ class MercadoPagoPayment {
 
   //Gera um número nesse formato 5466310457
   private generateRandomBigInt(): number {
-    let min = 1000000000; // O menor número de 10 dígitos.
-    let max = 9999999999; // O maior número de 10 dígitos.
+    let min = 0; // O menor número de 10 dígitos.
+    let max = 999; // O maior número de 10 dígitos.
 
     // Geramos um número aleatório de 10 dígitos, convertemos para BigInt e retornamos.
     let randomNumber = Math.floor(Math.random() * (max - min + 1) + min);
-    return Number(randomNumber);
+    return randomNumber;
   }
 
 }
