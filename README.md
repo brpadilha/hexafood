@@ -86,6 +86,14 @@ spec:
       restartPolicy: OnFailure
 ```
 
+Para testar o cluster, supondo que você tenha minikube e kubectl configurados na sua máquina, navegue até a pasta "k8s"e execute:
+```
+kubectl apply -f .
+```
+Depois só aguardar o aprovisionamento do ambiente e testar API, com a URL gerada pelo load balancer:
+```
+minikube service api-lb-service --url
+```
 ## :open_file_folder: Clean Architecture na prática
 
 A Clean Architecture é um conjunto de princípios de design de software que busca promover a separação de preocupações e a criação de sistemas desacoplados e testáveis. Concebida por Robert C. Martin ("Uncle Bob"), essa arquitetura prioriza a independência de frameworks, interfaces de usuário e bancos de dados, colocando as regras de negócio no centro do design. Assim, permite uma maior flexibilidade e facilidade de manutenção, tornando o sistema mais robusto e adaptável a mudanças.
