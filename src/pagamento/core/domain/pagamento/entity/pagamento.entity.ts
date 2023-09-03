@@ -16,6 +16,7 @@ export class Pagamento {
   pedido?: Pedido;
   status: string;
   constructor(id_cliente: number, id_pedido: number, id_transacao: bigint, descricao: string, plataforma: string, valor: number, status: string) {
+    console.log('IDPEDIDO', id_pedido)
     this.id_cliente = id_cliente;
     this.id_pedido = id_pedido;
     this.id_transacao = id_transacao;
@@ -27,9 +28,6 @@ export class Pagamento {
   }
 
   validate() {
-    if (!this.id_cliente) {
-      throw new PagamentosException('O id_cliente não pode ser vazio');
-    }
     if (!this.id_pedido) {
       throw new PagamentosException('O id_pedido não pode ser vazio');
     }

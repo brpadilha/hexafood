@@ -19,7 +19,6 @@ export class CreatePagamentoDto {
     email?: string;
     cpf?: string;
   };
-
   id_cliente?: number;
 
   status?: string;

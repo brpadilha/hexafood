@@ -16,6 +16,7 @@ async execute(): Promise<InputPedidoDTO[]> {
     }
 
     return pedidos.map((pedido) => ({
+      id: pedido.id,
       id_cliente: pedido.id_cliente,
       status: pedido.status.toString(),
       valor_total: pedido.valor_total,

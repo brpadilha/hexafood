@@ -49,13 +49,7 @@ export class MercadoPagoClient implements IPagamentosRepository {
       ...(payer && { payer }),
     });
 
-    // return this.pagamentosRepository.createPagamento({
-    //   valor: valor,
-    //   id_pedido: id_pedido,
-    //   id_transacao: mpTransaction.id,
-    //   plataforma: 'mercadopago',
-    //   descricao: description,
-    // });
+
   }
 
   findAll(): Promise<Pagamento[]> {

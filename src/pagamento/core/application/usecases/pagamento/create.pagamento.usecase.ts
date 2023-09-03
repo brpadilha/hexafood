@@ -24,11 +24,7 @@ export class CreatePagamentoUseCase {
     if (!pedido) {
       throw new PagamentosException('O Pedido informado não existe.');
     }
-    const transacao = await this.pagamentosClient.createPagamento({...data, status: 'pendente'});
-
-    return this.pagamentosRepository.createPagamento(
-      new Pagamento(data.id_cliente, data.id_pedido, transacao.id, description, 'mercado_pago', data.valor, 'pendente')
-    )
+    return this.pagamentosClient.createPagamento({...data,  status: 'pendente'});
   }
 }
 

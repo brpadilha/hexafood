@@ -3,7 +3,7 @@ import { StatusPedido } from '../enum/status-pedido.enum';
 import { Produto } from './produto.entity';
 
 export class Pedido {
-  id?: number;
+  id: number;
   codigo_pedido: string;
   valor_total: number;
   status: StatusPedido;

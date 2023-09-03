@@ -34,7 +34,7 @@ export class PedidosController {
 
   @Post()
   @ApiBody({ type: InputPedidoDTO })
-  createManyProdutos(@Body() pedido: InputPedidoDTO) {
+  createPedido(@Body() pedido: InputPedidoDTO) {
     return this.createPedidoUseCase.execute(pedido);
   }
 

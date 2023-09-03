@@ -11,5 +11,5 @@ export class PedidosPendentesUseCase {
   
 async execute(): Promise<OutputPedidoDTO[]> {
     return await this.pedidosRepository.findAll(StatusPedido.RECEBIDO);
-    }
+  }
 }
