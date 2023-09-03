@@ -17,7 +17,6 @@ export class Pagamento {
   status: string;
 
   constructor(id_cliente: number, id_pedido: number, id_transacao: number, descricao: string, plataforma: string, valor: number, status: string) {
-    console.log(id_cliente, id_pedido, id_transacao, descricao, plataforma, valor, status)
     this.id_cliente = id_cliente;
     this.id_pedido = id_pedido;
     this.id_transacao = id_transacao;
