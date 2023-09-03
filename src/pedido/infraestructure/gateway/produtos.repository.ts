@@ -17,8 +17,8 @@ export class ProdutosRepository implements IProdutosRepository {
   }
 
   async findAll(): Promise<Produto[] | null> {
-    var categorias = await this.prisma.produto.findMany();
-    return categorias;
+    var produtos = await this.prisma.produto.findMany();
+    return produtos;
   };
 
   async findByIdCategoria(idCategoria: number) {
