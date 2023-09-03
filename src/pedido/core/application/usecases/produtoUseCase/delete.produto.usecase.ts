@@ -1,15 +1,17 @@
 import { IProdutosRepository } from 'src/pedido/core/domain/repository/produtos.repository';
 import { ExistProdutoUseCase } from './exist.produto.usecase';
-import { InputProdutoDto } from './produto.dto';
+import { Inject } from '@nestjs/common';
 
 export class DeleteProdutoUseCase {
-  constructor(private produtosRepository: IProdutosRepository, 
+  constructor(
+    @Inject(IProdutosRepository)
+    private produtosRepository: IProdutosRepository, 
     private readonly existProdutoUseCase: ExistProdutoUseCase) 
   {}
 
   async execute(id: number) {
-     if (this.existProdutoUseCase.execute(id))
-         return this.produtosRepository.remove(id);
+    if (this.existProdutoUseCase.execute(id))
+      return this.produtosRepository.remove(id);
   }
 }
 
