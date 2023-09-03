@@ -1,8 +1,8 @@
-import { IPedidosRepository } from "src/pedido/core/domain/repository/pedidos.repository";
 import { ProdutoException } from "../../exceptions/produto.exception";
+import { IProdutosRepository } from "src/pedido/core/domain/repository/produtos.repository";
 
 export class FindAllProdutosUseCase {
-  constructor(private produtosRepository: IPedidosRepository) {}
+  constructor(private produtosRepository: IProdutosRepository) {}
 
   async execute() {
     const produtos =  this.produtosRepository.findAll();
