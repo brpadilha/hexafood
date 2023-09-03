@@ -6,7 +6,7 @@ export class Pagamento {
   id?: number;
   id_cliente?: number;
   id_pedido: number;
-  id_transacao: bigint;
+  id_transacao: number;
   descricao: string;
   plataforma: string;
   valor: number;
@@ -15,8 +15,8 @@ export class Pagamento {
   cliente?: Cliente;
   pedido?: Pedido;
   status: string;
-  constructor(id_cliente: number, id_pedido: number, id_transacao: bigint, descricao: string, plataforma: string, valor: number, status: string) {
-    console.log('IDPEDIDO', id_pedido)
+
+  constructor(id_cliente: number, id_pedido: number, id_transacao: number, descricao: string, plataforma: string, valor: number, status: string) {
     this.id_cliente = id_cliente;
     this.id_pedido = id_pedido;
     this.id_transacao = id_transacao;

@@ -13,7 +13,7 @@ export class PagamentoProcessado {
     const {status, id_pedido} = event;
     const pagamento = await this.updatePagamentoUseCase.execute(
       {
-        id: id_pedido,
+        id: event.id,
         status: status,
         id_pedido: id_pedido
       }

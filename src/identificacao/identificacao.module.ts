@@ -23,6 +23,6 @@ import { ValidationFilter } from './infrastructure/filter/validation.filter';
     CreateClienteUseCase,
     IndentifyClienteUseCase,
   ],
-  exports: [FindClienteUseCase, IClientesRepository],
+  exports: [FindClienteUseCase, IClientesRepository, IndentifyClienteUseCase],
 })
 export class IdentificacaoModule {}

@@ -7,6 +7,7 @@ import { PagamentosException } from '../../exceptions/pagamentos.exception';
 import { CreatePagamentoDto } from './pagamentoDto';
 import { IPagamentosRepository, PAGAMENTOS_REPOSITORY } from 'src/pagamento/core/domain/pagamento/repository/pagamentos.repository';
 import { Pagamento } from 'src/pagamento/core/domain/pagamento/entity/pagamento.entity';
+import { IndentifyClienteUseCase } from '../../../../../identificacao/core/application/usecases/cliente/identify.cliente.usecase';
   
 export class CreatePagamentoUseCase {
   constructor(
@@ -15,16 +16,19 @@ export class CreatePagamentoUseCase {
 
     @Inject(MERCADO_PAGO_CLIENT)
     private pagamentosClient: IPagamentosClientRepository,
-    private findPedidoByIdUseCase: FindPedidoByIdUseCase 
+    private findPedidoByIdUseCase: FindPedidoByIdUseCase,
+    private indentifyClienteUseCase: IndentifyClienteUseCase,
   ) {}
 
   async execute(data: CreatePagamentoDto) {
-    const description = `Hexafood - pedido ${data.id_pedido} - MercadoPago`;
     const pedido = await this.findPedidoByIdUseCase.findById(data.id_pedido);
     if (!pedido) {
       throw new PagamentosException('O Pedido informado não existe.');
     }
-    return this.pagamentosClient.createPagamento({...data,  status: 'pendente'});
+
+    const cliente = await this.indentifyClienteUseCase.execute(data.cpf);
+
+    return this.pagamentosClient.createPagamento({ ...data, cliente,  status: 'pendente'});
   }
 }
 

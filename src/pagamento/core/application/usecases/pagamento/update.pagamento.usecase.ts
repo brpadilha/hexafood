@@ -37,7 +37,7 @@ export class UpdatePagamentoUseCase {
       pedido.status = StatusPedido.CANCELADO
       await this.updatePedidoUseCase.execute(pedido);
     }
-    return this.pagamentosRepository.update(id, status)
+    return this.pagamentosRepository.update(+id, status)
   }
 }
 

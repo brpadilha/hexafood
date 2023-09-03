@@ -7,7 +7,6 @@ import {
 import mercadopago from '../../../../../mocks/mercadoPagoMockService';
 import {
   CreatePagamentoDto,
-  PagamentoDto,
 } from '../../usecases/pagamento/pagamentoDto';
 import { Pagamento } from 'src/pagamento/core/domain/pagamento/entity/pagamento.entity';
 
@@ -23,13 +22,12 @@ export class MercadoPagoClient implements IPagamentosRepository {
   }
 
   async createPagamento({ valor, id_pedido, cliente }: CreatePagamentoDto) {
-    const description = `Hexafood - pedido ${id_pedido} - MercadoPago`;
-
-    const { nome, email, cpf } = cliente;
+    const descricao = `Hexafood - pedido ${id_pedido} - MercadoPago`;
+    const { nome, cpf } = cliente;
     const nameParts = nome.split(' ');
 
     const payer =
-      (nome && email) || cpf
+      (nome) || cpf
         ? {
             ...(cpf &&
               ({ identification: { type: 'CPF', number: cpf } } as const)),
@@ -38,16 +36,27 @@ export class MercadoPagoClient implements IPagamentosRepository {
               last_name:
                 nameParts.length > 1 ? nameParts[nameParts.length - 1] : '',
             }),
-            ...(email && { email }),
           }
         : null;
 
-    return mercadopago.payment.create({
+    return await mercadopago.payment.create({
       transaction_amount: valor,
-      description,
+      description: descricao,
       payment_method_id: 'pix',
       ...(payer && { payer }),
     });
+
+    // const pagamento = new Pagamento(
+    //   cliente.id,
+    //   id_pedido,
+    //   Number(transaction.id),
+    //   descricao,
+    //   'MercadoPago',
+    //   valor,
+    //   transaction.status,
+    // )
+    
+    // this.pagamentosRepository.createPagamento(pagamento);
 
 
   }
