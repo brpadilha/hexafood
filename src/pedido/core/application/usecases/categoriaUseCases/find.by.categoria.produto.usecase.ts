@@ -1,8 +1,12 @@
 import { IProdutosRepository } from "src/pedido/core/domain/repository/produtos.repository";
 import { ProdutoException } from "../../exceptions/produto.exception";
+import { Inject } from '@nestjs/common';
 
 export class FindByIdCategoriaUseCase {
-  constructor(private produtosRepository: IProdutosRepository) {}
+  constructor(
+    @Inject(IProdutosRepository)
+
+    private produtosRepository: IProdutosRepository) {}
 
   async execute(id_categoria: number) {
     return this.produtosRepository
