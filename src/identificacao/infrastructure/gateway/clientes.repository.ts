@@ -17,7 +17,7 @@ export class ClientesRepository implements IClientesRepository {
 
   async findUnique(cpf: string): Promise<Cliente | null> {
     const cliente = await this.prisma.cliente.findUnique({
-      where: { cpf },
+      where: { cpf: cpf },
     });
     if (cliente) {
       return ClienteFactory.create(cliente);
