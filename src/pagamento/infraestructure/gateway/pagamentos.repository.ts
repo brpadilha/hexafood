@@ -42,9 +42,7 @@ export class PagamentosRepository implements IPagamentosRepository {
   }
 
   async findById(id: number): Promise<OutPutPagamentoDto | null> {
-    const pagamentos = await this.prisma.pagamento.findMany()
-    const pagamento = pagamentos.find((pagamento) => pagamento.id === id);
-  
+    const pagamento = await this.prisma.pagamento.findUnique({ where: { id } })  
     if (pagamento) {
       const pagamentoFactory = PagamentoFactory.create(pagamento);
       return {

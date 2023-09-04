@@ -1,3 +1,0 @@
-
-ALTER TABLE "pagamentos" ALTER COLUMN "id" TYPE BIGINT;
-

@@ -76,7 +76,7 @@ model Item {
 }
 
 model Pagamento {
-  id           BigInt    @id @default(autoincrement())
+  id           Int    @id @default(autoincrement())
   id_cliente   Int?
   id_pedido    Int
   id_transacao BigInt @unique

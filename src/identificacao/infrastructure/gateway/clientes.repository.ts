@@ -27,7 +27,7 @@ export class ClientesRepository implements IClientesRepository {
 
   async existsByCpf(cpf: string): Promise<boolean> {
     const exist = await this.prisma.cliente.count({
-      where: { cpf },
+      where: { cpf: cpf },
     });
     return exist > 0;
   }
