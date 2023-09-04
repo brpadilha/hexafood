@@ -57,7 +57,6 @@ model Pedido {
   cliente    Cliente?    @relation(fields: [id_cliente], references: [id])
   itens      Item[]
   Pagamento  Pagamento[]
-
   @@map("pedidos")
 }
 
@@ -84,7 +83,8 @@ model Pagamento {
   descricao    String
   plataforma   String
   valor        Float
-
+  status       String @default("PENDENTE")
+  
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
 

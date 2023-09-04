@@ -1,6 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ClientesController } from '../../src/identificacao/adapter/driver/clientes.controller';
-import { ClientesService } from '../../src/identificacao/core/application/services/clientes.service';
+import { ClientesController } from '../../src/identificacao/infrastructure/controller/clientes.controller';
+import { CreateClienteUseCase } from 'src/identificacao/core/application/usecases/cliente/create.cliente.usecase';
+import { IndentifyClienteUseCase } from 'src/identificacao/core/application/usecases/cliente/identify.cliente.usecase';
+import { FindClienteUseCase } from 'src/identificacao/core/application/usecases/cliente/find.cliente.usecase';
 
 describe('ClientesController', () => {
   let controller: ClientesController;
@@ -8,7 +10,11 @@ describe('ClientesController', () => {
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       controllers: [ClientesController],
-      providers: [ClientesService],
+      providers: [
+        CreateClienteUseCase,
+        IndentifyClienteUseCase,
+        FindClienteUseCase,
+      ],
     }).compile();
 
     controller = module.get<ClientesController>(ClientesController);
