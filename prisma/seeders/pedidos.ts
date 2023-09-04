@@ -3,7 +3,7 @@ import {EventEmitter} from 'events';
 import { Item, Pedido } from '../../src/pedido/core/domain/entity/pedido.entity';
 import { Produto } from '../../src/pedido/core/domain/entity/produto.entity';
 import { NovoPedidoEvent } from '../../src/pedido/core/application/events/novo-pedido.event';
-import { PedidoDTO } from 'src/pedido/core/application/usecases/pedidoUseCase/pedido.dto';
+import { PedidoDTO } from '../../src/pedido/core/application/usecases/pedidoUseCase/pedido.dto';
 
 const generatePedido = ( pedido: Pedido) => ({
   where: { id: pedido.id },
