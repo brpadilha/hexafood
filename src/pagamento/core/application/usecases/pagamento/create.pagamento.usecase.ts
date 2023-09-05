@@ -26,10 +26,24 @@ export class CreatePagamentoUseCase {
       throw new PagamentosException('O Pedido informado não existe.');
     }
 
-    const cliente = await this.indentifyClienteUseCase.execute(data.cpf);
+    var cpf = this.getCpf( data);
+
+    if(!cpf){
+        return new PagamentosException("Não foi possível processar o pagamento");
+    }
+    const cliente = await this.indentifyClienteUseCase.execute(cpf);
 
     return this.pagamentosClient.createPagamento({ ...data, cliente,  status: 'pendente'});
   }
+
+
+  private getCpf(data: CreatePagamentoDto): string {
+    if (data.cliente && data.cliente.cpf !== null) {
+      return data.cliente.cpf;
+    } else if (data.cpf !== null) {
+      return data.cpf;
+    } else {
+      return null;
+    }  
+  }
 }
-
-
