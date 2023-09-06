@@ -7,9 +7,14 @@ export class CategoriasRepository implements ICategoriasRepository {
   private prisma: PrismaClient;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL, 
+        },
+      },
+    });
   }
-  
   async create(createCategoriaDto: InputCategoriaDto): Promise<OutputCategoriaDto>{
     return this.prisma.categoria.create({
       data: {

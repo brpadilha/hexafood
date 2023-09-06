@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: c-api-deployment
-          image: marayza/hexafoodk8s:v15
+          image: marayza/hexafood:latest
           ports:
             - containerPort: 3000
           command: ['/bin/sh', '-c']
