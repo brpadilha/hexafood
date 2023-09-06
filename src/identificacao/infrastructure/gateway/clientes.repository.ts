@@ -7,7 +7,13 @@ export class ClientesRepository implements IClientesRepository {
   private prisma: PrismaClient;
 
   constructor() {
-    this.prisma = new PrismaClient();
+    this.prisma = new PrismaClient({
+      datasources: {
+        db: {
+          url: process.env.DATABASE_URL, 
+        },
+      },
+    });
   }
 
   async create(data: Cliente): Promise<Cliente> {
@@ -17,7 +23,7 @@ export class ClientesRepository implements IClientesRepository {
 
   async findUnique(cpf: string): Promise<Cliente | null> {
     const cliente = await this.prisma.cliente.findUnique({
-      where: { cpf },
+      where: { cpf: cpf },
     });
     if (cliente) {
       return ClienteFactory.create(cliente);
