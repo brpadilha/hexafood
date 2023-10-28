@@ -24,15 +24,14 @@ export class ProdutosController {
     private readonly findAllProdutosUseCase: FindAllProdutosUseCase,
     private readonly findByIdCategoriaUseCase: FindByIdCategoriaUseCase,
     private readonly updateProdutoUseCase: UpdateProdutoUseCase,
-    private readonly deleteProdutoUseCase : DeleteProdutoUseCase
-    
-    ) {}
+    private readonly deleteProdutoUseCase: DeleteProdutoUseCase,
+  ) {}
 
   @Post()
   @ApiBody({ type: [InputProdutoDto] })
   createManyProdutos(@Body() produto: InputProdutoDto[]) {
     return this.createProdutoUseCase.execute(produto);
-  }  
+  }
 
   @Get()
   findAll() {
