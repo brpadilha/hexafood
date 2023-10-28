@@ -23,6 +23,7 @@ export const seedPedidos = async (client: PrismaClient) => {
  
   const pedidosPromises = [];
   for (let i = 1; i <= 5; i++) {
+    console.log(pedidosPromises)
 
     const pedido: Pedido = await SetPedidos(i);
     pedidosPromises.push(client.pedido.upsert(generatePedido(pedido)));
