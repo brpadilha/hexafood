@@ -395,7 +395,7 @@ Em todo processo é possível consultar pedido atual através do código gerado 
 
 [/pedidos/{codigo_pedido}](http://localhost:3000/api#/pedidos/PedidosController_consultarPedidoPorCodigo)
 
-### Pagamento ###
+### Pagamento
 Antes do pedido prosseguir para cozinha para preparação, ele deve ter seu pagamento processado. Como isso é feito por um sistema externo, foi optado por fazer isso de forma assíncrona. 
 
 Quando um pedido é criado, primeiramente é definido um STATUS de "INICIADO", e disparado um evento no sistema. Foi utilizado um recurso do nestjs chamado "event-emitter", para diminuir acoplamento e separar responsabilidades. O funcionamento se dá seguinte forma: 
@@ -463,10 +463,23 @@ export class UpdatePagamentoUseCase {
 ```
 O restante da lógica se mantém, sendo caso o pagamento seja aprovado, o pedido passa a ter o status "RECEBIDO" ficando disponível para preparação não seja aprovado, e caso não seja aprovado, o pedido tem o status "CANCELADO" e não avança para fila de preparação. Uma representação visual desse fluxo consta na figura a seguir:
 <br>
-<h4 align="center">
+<p align="center">
     <img alt="Fluxo de pagamentos" title="fluxo-pagamento" src=".github/readme/fluxo_pagamento.jpg" width="1864px" />
-</h4>
+</p>
 <br>
+
+
+### Estrutura de dados
+Nosso banco de dados consiste em cinco tabelas. A primeira é a tabela de categorias de produtos, como lanches, refrigerantes, etc. Em seguida, temos a tabela de clientes, na qual não gerenciamos as informações de login, por isso não armazenamos senhas. Temos também a tabela de produtos em si, e a tabela de pedidos, que relaciona os itens dos produtos com os clientes. Por fim, temos a tabela de valores e status dos produtos.
+
+<p align="center">
+    <img alt="Fluxo de pagamentos" title="fluxo-pagamento" src=".github/readme/estrutura_dados.png" />
+</p>
+
+### Banco de dados
+Optamos pelo banco de dados SQL Postgres devido a alguns motivos. Primeiro, a familiaridade dos membros da equipe com essa tecnologia. Além disso, desejávamos estabelecer relacionamentos entre tabelas, como clientes e pedidos, categorias de produtos e itens que relacionam pedidos e produtos. 
+Também levamos em consideração que não teríamos um grande volume de requisições diárias, evitando sobrecarregar o banco de dados. Com base nesses aspectos, a escolha pelo Postgres foi a mais adequada.
+
 
 ## :bookmark_tabs: Licença
 
@@ -479,6 +492,6 @@ Feito com ❤️ por:
 - [Bruno Padilha](https://www.linkedin.com/in/brpadilha/)
 - [Lucas Siqueira](https://www.linkedin.com/in/lucassouzatidev/)
 - [Marayza](https://www.linkedin.com/in/marayza-gonzaga-7766251b1/)
-- [Mario Celso]()
+
 
 [Voltar ao topo](#índice)
