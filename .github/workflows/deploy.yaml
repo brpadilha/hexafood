@@ -27,5 +27,5 @@ jobs:
 
       - name: Helm Install and Kubectl Apply
         run: |
-          helm upgrade --install hexacluster hexacluster --set serviceAccount.annotations.eks.role_arn
+          helm upgrade --install hexacluster hexacluster
   
