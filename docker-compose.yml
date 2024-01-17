@@ -17,8 +17,8 @@
         timeout: 5s
         retries: 5
 
-    api:
-      container_name: 'hexafood-api'
+    api-pedido:
+      container_name: 'hexafood-api-pedido'
       build:
         context: .
         dockerfile: Dockerfile
@@ -38,6 +38,25 @@
       volumes:
         - .:/home/node/app
         - /home/node/app/node_modules
+    localstack:
+      image: localstack/localstack:latest
+      ports:
+        - '4566-4597:4566-4597'
+      environment:
+        - AWS_ACCESS_KEY_ID=dummy
+        - AWS_SECRET_ACCESS_KEY=dummy
+        - AWS_DEFAULT_REGION=us-east-1
+        - DEBUG=1
+        - LOCALSTACK_PERSISTENCE=1
+        - SERVICES=sqs
+        - DEFAULT_REGION=us-east-1
+        - EDGE_PORT=4566
+        - SQS_ENDPOINT_STRATEGY=path
+        - HOSTNAME_EXTERNAL=localstack
+      volumes:
+        - "./docker-compose/localstack:/var/lib/localstack"
+      networks:
+        - hexafood-bridge
 
   networks:
     hexafood-bridge:

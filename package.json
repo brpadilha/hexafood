@@ -24,6 +24,7 @@
     "seed": "ts-node seed.ts"
   },
   "dependencies": {
+    "@aws-sdk/client-sqs": "^3.490.0",
     "@faker-js/faker": "^8.0.2",
     "@nestjs/common": "^9.0.0",
     "@nestjs/config": "^2.3.2",
